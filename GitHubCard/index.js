@@ -1,8 +1,13 @@
+import axios from 'axios';
+
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
+
+
+
 
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
@@ -11,6 +16,8 @@
 
     Skip to STEP 3 (line 34).
 */
+
+
 
 /*
   STEP 4: Pass the data received from Github into your function,
@@ -28,7 +35,7 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+//const followersArray = [];
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -58,3 +65,112 @@ const followersArray = [];
     luishrd
     bigknell
 */
+
+//Axios
+axios.get(`https://api.github.com/users/Pluviio`)
+  .then(res => {
+    const profileCard = userInfo(res.data)
+    console.log(res);
+    document.querySelector('.cards').appendChild(profileCard)
+  })
+
+  .catch(err => {
+    console.error(err)
+  })
+
+
+const myFollowers = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell'];
+
+// myFollowers.forEach( user => {
+//    const profileCard = myFollowers + profileCard;
+// })
+
+
+//Function 
+const infoCards = document.querySelector('.cards')
+function userInfo(obj) {
+
+  const profileCard = document.createElement('div');
+
+
+  //Image Section
+  const imgURL = document.createElement('img');
+  imgURL.src = obj['avatar_url']
+  profileCard.appendChild(imgURL)
+
+
+  const cardInfo = document.createElement('div');
+  profileCard.appendChild(cardInfo);
+
+
+  //Name Section
+  const name = document.createElement('h3');
+  cardInfo.appendChild(name)
+  name.textContent = obj['name']
+
+
+  const username = document.createElement('p');
+  cardInfo.appendChild(username)
+  username.textContent = obj['login']
+
+
+
+  const location = document.createElement('p');
+  cardInfo.appendChild(location)
+  location.textContent = `Location: ${obj['location']}`
+
+
+  const profile = document.createElement('p');
+  cardInfo.appendChild(profile)
+  profile.textContent = 'Profile: '
+
+
+  const address = document.createElement('a');
+  profile.appendChild(address)
+  address.textContent = obj['html_url']
+
+
+  const followers = document.createElement('p');
+  cardInfo.appendChild(followers)
+  followers.textContent = 'Followers: ' + obj['followers']
+
+
+  const following = document.createElement('p');
+  cardInfo.appendChild(following)
+  following.textContent = 'Following: ' + obj['following']
+
+
+  const bio = document.createElement('p');
+  cardInfo.appendChild(bio)
+  bio.textContent = 'Bio: ' + obj['bio']
+
+  profileCard.classList.add('card')
+  infoCards.classList.add('infoCards')
+  cardInfo.classList.add('card-info')
+  name.classList.add('name')
+  username.classList.add('username')
+
+  
+  address.href = obj["html_url"];
+  address.textContent = "Github"
+  address.target = "_blank"
+
+
+  return profileCard
+
+
+}
+
+myFollowers.forEach( user => {
+  axios.get(`https://api.github.com/users/${user}`)
+  .then(res => {
+    const profileCard = userInfo(res.data)
+    console.log(res);
+    document.querySelector('.cards').appendChild(profileCard)
+  })
+
+  .catch(err => {
+    console.error(err)
+  })
+})
+
